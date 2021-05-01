@@ -70,8 +70,32 @@ Before developing, one must learn and understand following commands
 - [XCLAIM](https://redis.io/commands/xclaim) - This command changes the ownership of a pending message.
 
 #### Producer:
-
-creating producers using GOLang concurrency
+Redis Client
+```
+type Database struct {
+	Client *redis.Client
+}
+func Connect() (*Database, error) {
+	client := redis.NewClient(&redis.Options{
+		Addr:     "127.0.0.1:6379",
+		Password: "",
+		DB:       0,
+	})
+	return &Database{
+		Client: client,
+	}, nil
+}
+```
+Creating producers using GOLang concurrency\
+Producer produces 1000 messages at a time using goroutine
+```
+client, err := Connect()
+ctx := context.Background()
+for i := 1; i <= 1000; i++ {
+	go Producer(ctx, client, i)
+}
+```
+XADD to add messages in stream
 ```
 func Producer(ctx context.Context, client *Database, producer int) {
 	values := make(map[string]interface{})
@@ -90,6 +114,7 @@ func Producer(ctx context.Context, client *Database, producer int) {
 	}
 }
 ```
+
 
 #### Consumer:
 
