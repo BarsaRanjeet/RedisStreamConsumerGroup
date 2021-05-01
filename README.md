@@ -43,13 +43,13 @@ In this scenario there will be many producers and single consumer all the  messa
 
 In this scenario there will be many producers and many consumers, In practical terms, if we imagine having three consumers C1, C2, C3, and a stream that contains the messages 1, 2, 3, 4, 5, 6, 7 then what we want is to serve the messages according to the following diagram:
 
-> 1 -> C1
-> 2 -> C2
-> 3 -> C3
-> 4 -> C1
-> 5 -> C2
-> 6 -> C3
-> 7 -> C1
+1 -> C1\
+2 -> C2\
+3 -> C3\
+4 -> C1\
+5 -> C2\
+6 -> C3\
+7 -> C1
 
 In order to achieve this, Redis uses a concept called consumer groups.
 
