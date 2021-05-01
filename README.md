@@ -29,6 +29,7 @@ In this scenario there will be 1 producer which produces messages and 1 consumer
 
 ### 2nd scenario:
 ![1 producer to consumer n](https://lh6.googleusercontent.com/fBI5S9P4T3UjSLHiPU2hGP2u4vOZoy4Dy3WOCkkaZwOamZrXMa-C8xL1cN3ZtGS9wA-JJLL58cFoSGWBlPJRX8q31qb0D4drIWzTkms)
+
 In this scenario there will be 1 producer which produces messages and stores in redis database and number of consumers which consume messages at a time, if producer produces 800 messages per second then at a time 1 consumer will consume 200 messages that means redis will divide all messages equally to all the consumers 
 
 ### 3rd scenario:
