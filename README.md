@@ -1,6 +1,6 @@
 # RedisStreamConsumerGroup
 
-## _Contents :-_
+## _Content :-_
 - Introduction
 - Redis Stream
 - Consumer Group
