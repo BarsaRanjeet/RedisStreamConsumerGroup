@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/go-redis/redis/v8"
 )
@@ -35,7 +36,7 @@ func Producer(ctx context.Context, client *Database, producer int) {
 			client.Client.XAdd(ctx, &redis.XAddArgs{Stream: "messageStream", ID: "*", Values: values})
 		}
 		i += 1
-		// time.Sleep(time.Millisecond * 1000)
+		time.Sleep(time.Millisecond * 1000)
 	}
 }
 
