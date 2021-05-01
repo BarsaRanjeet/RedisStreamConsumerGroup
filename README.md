@@ -69,6 +69,21 @@ Before developing, one must learn and understand following commands
 - [XPENDING](https://redis.io/commands/xpending) - The XPENDING command is the interface to inspect the list of pending messages.
 - [XCLAIM](https://redis.io/commands/xclaim) - This command changes the ownership of a pending message.
 
+Producer using GOLang
+```
+func Connect() (*Database, error) {
+	client := redis.NewClient(&redis.Options{
+		Addr:     "127.0.0.1:6379",
+		Password: "",
+		DB:       0,
+	})
+	return &Database{
+		Client: client,
+	}, nil
+}
+``` js
+
+
 ## Recovering From Failures:-
 
 ## Conclusion:-
