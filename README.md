@@ -117,10 +117,8 @@ func Producer(ctx context.Context, client *Database, producer int) {
 Every second producer will produce 1000 messages and will add to redis stream using xadd command  
 
 #### Consumer (Python):
----
-**Note**
-Before running consumer create consumer group using xgroup command
----
+> Note : Before running consumer create consumer group using XGROUP command
+
 Redis connection
 ```
 import redis
@@ -128,6 +126,38 @@ import redis
 redis = redis.Redis(host='127.0.0.1', port=6379, db=0)
 ```
 Consuming messages using xreadgroup
+```
+lastId = '0-0'
+check_backlog = True
+
+# while True : For infinite loop
+while True:
+    myid = ""
+    if check_backlog:
+        myid = lastId
+    else:
+        myid = '>'
+    
+    # consuming messages
+    consumer = redis.xreadgroup(groupName, consumerName, {streamName: myid},block=2000,count=10)
+    try:
+        if len(consumer[0][1]) == 0:
+            check_backlog = False
+    except:
+        pass
+    if len(consumer) > 0:
+        for e in consumer[0][1]:
+            id = e[0].decode("utf-8")
+
+            # processing message
+            process_message(id)
+
+            # acknowledging
+            redis.xack(streamName , groupName, id)
+
+            lastId = id
+```
+
 ## Recovering From Failures:-
 
 ## Conclusion:-

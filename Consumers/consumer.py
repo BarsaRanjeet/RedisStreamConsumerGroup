@@ -18,6 +18,7 @@ while True:
     else:
         myid = '>'
     
+    # consuming messages
     consumer = redis.xreadgroup(groupName, consumerName, {streamName: myid},block=2000,count=10)
     try:
         if len(consumer[0][1]) == 0:
