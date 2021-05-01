@@ -1,29 +1,54 @@
-from connect import r
+# importing module
+from connect import redis
 
-consumerName = "consumerRecover"
-groupName = "service-1"
-streamName = "scenario-3"
+consumerName = "consumerRecover"    # defining consumer name
+groupName = "service"               # defining group name
+streamName = "messageStream"        # defining stream key name
 
+# function for processing message 
 def process_message(id):
-    r.hincrby(name="consumer",key=id,amount=1)
+    redis.hincrby(name="consumer",key=id,amount=1)
 
+# while True : For infinite loop
 while True:
 
-    pending = r.xpending(name="scenario-3",groupname=groupName)
+    # Fetching details of pending message
+    pending = redis.xpending(name=streamName,groupname=groupName)
+
+    # checking if there any pending message
     if pending.get("pending"):
+
         if int(pending.get("pending")) > 0:
-            pending = r.xpending_range(name=streamName,groupname=groupName,min="-",max="+",count=10,consumername=pending.get("consumers")[0].get("name"))
+
+            # Fetching pending messages with count 10 
+            pending = redis.xpending_range(name=streamName,groupname=groupName,min="-",max="+",count=10,consumername=pending.get("consumers")[0].get("name"))
+            
             message_ids = list()
             for k in pending:
                 id = k.get("message_id").decode("utf-8")
-                message_ids.append(id)  
-            claim = r.xclaim(name=streamName,groupname=groupName,consumername=consumerName,min_idle_time=2000,message_ids=message_ids) 
-            if len(claim) > 0:
-                for e in claim:
-                    id = e[0].decode("utf-8")
+                message_ids.append(id)
+            
+            # changing ownership of messages to acknowledge
+            # claim = redis.xclaim(name=streamName,groupname=groupName,consumername=consumerName,min_idle_time=2000,message_ids=message_ids) 
+            
+            # if len(claim) > 0:
+                
+            #     for e in claim:
+                    
+            #         id = e[0].decode("utf-8")
 
-                    # processing message
-                    process_message(id)
+            #         # processing message
+            #         process_message(id)
 
-                    # acknowledging
-                    r.xack(streamName , groupName, id)
+            #         # acknowledging
+            #         redis.xack(streamName , groupName, id)
+
+            for e in message_ids:
+                    
+                id = e
+
+                # processing message
+                process_message(id)
+
+                # acknowledging
+                redis.xack(streamName , groupName, id)

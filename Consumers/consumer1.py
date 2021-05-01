@@ -1,11 +1,12 @@
-from connect import r
+# importing module
+from connect import redis
 
-consumerName = "consumer1"
-groupName = "service-1"
-streamName = "scenario-3"
+consumerName = "consumerRecover"    # defining consumer name
+groupName = "service"               # defining group name
+streamName = "messageStream"        # defining stream key name
 
 def process_message(id):
-    r.hincrby(name="consumer",key=id,amount=1)
+    redis.hincrby(name="consumer",key=id,amount=1)
 
 lastId = '0-0'
 check_backlog = True
@@ -17,7 +18,7 @@ while True:
     else:
         myid = '>'
     
-    consumer = r.xreadgroup(groupName, consumerName, {streamName: myid},block=2000,count=10)
+    consumer = redis.xreadgroup(groupName, consumerName, {streamName: myid},block=2000,count=10)
     try:
         if len(consumer[0][1]) == 0:
             check_backlog = False
@@ -31,6 +32,6 @@ while True:
             process_message(id)
 
             # acknowledging
-            r.xack(streamName , groupName, id)
+            # redis.xack(streamName , groupName, id)
 
             lastId = id
