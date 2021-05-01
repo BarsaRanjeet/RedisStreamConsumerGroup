@@ -6,7 +6,7 @@
 - Consumer Group
 - Scenario
 - Development
-- Recovering from failures
+- Redis Stream consumer failure recovery
 - Conclusion
 
 ## Introduction:-
@@ -157,7 +157,50 @@ while True:
 
             lastId = id
 ```
+As you can see the idea here is to start by consuming the history, that is, our list of pending messages. This is useful because the consumer may have crashed before, so in the event of a restart we want to re-read messages that were delivered to us without getting acknowledged. 
+Once the history was consumed, and we get an empty list of messages, we can switch to use the > special ID in order to consume new messages.
+## Redis Stream consumer failure recovery:-
+The example above allows us to write consumers that participate in the same consumer group, each taking a subset of messages to process, and when recovering from failures re-reading the pending messages that were delivered just to them. However in the real world consumers may permanently fail and never recover. What happens to the pending messages of the consumer that never recovers after stopping for any reason?
 
-## Recovering From Failures:-
+Redis consumer groups offer a feature that is used in these situations in order to claim the pending messages of a given consumer so that such messages will change ownership and will be re-assigned to a different consumer. The feature is very explicit. A consumer has to inspect the list of pending messages, and will have to claim specific messages using a special command, otherwise the server will leave the messages pending forever and assigned to the old consumer.
 
-## Conclusion:-
+In this scenario we can use following commands:
+- XPENDING
+- XCLAIM
+
+The implementation is very simple
+- A dedicated consumer to monitor the pending message
+- Use special commands to distribute these messages to other consumers
+
+XPENDING is a read-only command that will output the total number of all messages in the pending message in the specified group, the start ID, the end ID, and the number of messages in the pending message in each consumer. You can get more detailed information by specifying the start and end id and consumerName.
+
+XCLAIM is used to change the ownership of the message
+```
+# while True : For infinite loop
+while True:
+
+    # Fetching details of pending message
+    pending = redis.xpending(name=streamName,groupname=groupName)
+
+    # checking if there any pending message
+    if pending.get("pending"):
+        if int(pending.get("pending")) > 0:
+            # Fetching pending messages with count 10 
+            pending = redis.xpending_range(name=streamName,groupname=groupName,min="-",max="+",count=10,consumername=pending.get("consumers")[0].get("name"))
+            
+            message_ids = list()
+            for k in pending:
+                id = k.get("message_id").decode("utf-8")
+                message_ids.append(id)
+            
+            # changing ownership of messages to acknowledge
+            claim = redis.xclaim(name=streamName,groupname=groupName,consumername=consumerName,min_idle_time=2000,message_ids=message_ids) 
+            
+            if len(claim) > 0:
+                for e in claim:
+                    id = e[0].decode("utf-8")
+                    
+                    # acknowledging
+                    redis.xack(streamName , groupName, id)
+```
+
