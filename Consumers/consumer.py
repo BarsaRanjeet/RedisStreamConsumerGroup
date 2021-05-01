@@ -32,6 +32,6 @@ while True:
             process_message(id)
 
             # acknowledging
-            # redis.xack(streamName , groupName, id)
+            redis.xack(streamName , groupName, id)
 
             lastId = id

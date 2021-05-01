@@ -69,7 +69,7 @@ Before developing, one must learn and understand following commands
 - [XPENDING](https://redis.io/commands/xpending) - The XPENDING command is the interface to inspect the list of pending messages.
 - [XCLAIM](https://redis.io/commands/xclaim) - This command changes the ownership of a pending message.
 
-#### Producer:
+#### Producer (GoLang):
 Redis Client
 ```
 type Database struct {
@@ -114,10 +114,20 @@ func Producer(ctx context.Context, client *Database, producer int) {
 	}
 }
 ```
+Every second producer will produce 1000 messages and will add to redis stream using xadd command  
 
-
-#### Consumer:
-
+#### Consumer (Python):
+---
+**Note**
+Before running consumer create consumer group using xgroup command
+---
+Redis connection
+```
+import redis
+# Connect to a local redis instance
+redis = redis.Redis(host='127.0.0.1', port=6379, db=0)
+```
+Consuming messages using xreadgroup
 ## Recovering From Failures:-
 
 ## Conclusion:-
