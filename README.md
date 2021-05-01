@@ -7,7 +7,6 @@
 - Scenario
 - Development
 - Redis Stream consumer failure recovery
-- Conclusion
 
 ## Introduction:-
 In a perfect world, both data producers and consumers work at the same pace, and there’s no data loss or data backlog. Unfortunately, that’s not the case in the real world. In nearly all real-time data stream processing use cases, producers and consumers work at different speeds. In addition, there is more than one type of consumer, each with its own requirements and processing pace. Redis Streams addresses this need with a feature set that gravitates heavily towards supporting the consumers.
