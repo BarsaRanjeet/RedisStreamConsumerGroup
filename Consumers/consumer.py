@@ -1,7 +1,7 @@
 # importing module
 from connect import redis
 
-consumerName = "consumerRecover"    # defining consumer name
+consumerName = "consumer"    # defining consumer name
 groupName = "service"               # defining group name
 streamName = "messageStream"        # defining stream key name
 
