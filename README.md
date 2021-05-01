@@ -42,13 +42,15 @@ In this scenario there will be many producers and single consumer all the  messa
 ![Producer n to consumer n](https://lh5.googleusercontent.com/gB6NEId003-Y31bgXxO60JNMa8kiu8WVOH8bDVFaGKKEiFICh2Zi7Qk0nXon4aAM5mNKasE5hDOl0pwrNzJV6vDTOYN11pOp_31GJPwr-zuiBFK2lGI4d-LdZHxNhXb6ErkdIp-CJLrlzuRQ1Q)
 
 In this scenario there will be many producers and many consumers, In practical terms, if we imagine having three consumers C1, C2, C3, and a stream that contains the messages 1, 2, 3, 4, 5, 6, 7 then what we want is to serve the messages according to the following diagram:
-##### 1 -> C1
-##### 2 -> C2
-##### 3 -> C3
-##### 4 -> C1
-##### 5 -> C2
-##### 6 -> C3
-##### 7 -> C1
+
+1 -> C1
+2 -> C2
+3 -> C3
+4 -> C1
+5 -> C2
+6 -> C3
+7 -> C1
+
 In order to achieve this, Redis uses a concept called consumer groups.
 
 A consumer group is like a pseudo consumer that gets data from a stream, and actually serves multiple consumers, providing certain guarantees:
