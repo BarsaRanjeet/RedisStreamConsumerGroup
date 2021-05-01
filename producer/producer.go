@@ -32,7 +32,7 @@ func Producer(ctx context.Context, client *Database, producer int) {
 		values["serial"] = i
 		inc := client.Client.Incr(ctx, "producer"+fmt.Sprint(producer))
 		if inc.Val() > 0 {
-			client.Client.XAdd(ctx, &redis.XAddArgs{Stream: "scenario-3", ID: "*", Values: values})
+			client.Client.XAdd(ctx, &redis.XAddArgs{Stream: "messageStream", ID: "*", Values: values})
 		}
 		i += 1
 		// time.Sleep(time.Millisecond * 1000)

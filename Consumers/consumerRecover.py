@@ -29,26 +29,16 @@ while True:
                 message_ids.append(id)
             
             # changing ownership of messages to acknowledge
-            # claim = redis.xclaim(name=streamName,groupname=groupName,consumername=consumerName,min_idle_time=2000,message_ids=message_ids) 
+            claim = redis.xclaim(name=streamName,groupname=groupName,consumername=consumerName,min_idle_time=2000,message_ids=message_ids) 
             
-            # if len(claim) > 0:
+            if len(claim) > 0:
                 
-            #     for e in claim:
+                for e in claim:
                     
-            #         id = e[0].decode("utf-8")
+                    id = e[0].decode("utf-8")
 
-            #         # processing message
-            #         process_message(id)
+                    # processing message
+                    process_message(id)
 
-            #         # acknowledging
-            #         redis.xack(streamName , groupName, id)
-
-            for e in message_ids:
-                    
-                id = e
-
-                # processing message
-                process_message(id)
-
-                # acknowledging
-                redis.xack(streamName , groupName, id)
+                    # acknowledging
+                    redis.xack(streamName , groupName, id)
