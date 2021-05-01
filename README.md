@@ -23,18 +23,18 @@ There are four scenarios which need to understand before implementing consumer g
  
 	
 
-#### 1st scenario:
+### 1st scenario:
 
 1 to 1 scenario
 In this scenario there will be 1 producer which produces messages and 1 consumer which consumes message both 
 
-#### 2nd scenario:
+### 2nd scenario:
 
 1 producer to consumer n
 
 In this scenario there will be 1 producer which produces messages and stores in redis database and number of consumers which consume messages at a time, if producer produces 800 messages per second then at a time 1 consumer will consume 200 messages that means redis will divide all messages equally to all the consumers 
 
-#### 3rd scenario:
+### 3rd scenario:
 
 N producers to 1 consumer
 
@@ -44,7 +44,7 @@ In this scenario there will be many producers and single consumer all the  messa
 
 
 
-#### 4th scenario:
+### 4th scenario:
 
 Producer n to consumer n
 
