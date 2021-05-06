@@ -21,24 +21,24 @@ The purpose of consumer groups is to scale out your data consumption process. A 
 There are four scenarios which need to understand before implementing consumer groups
 
 ### 1st scenario:
-![1 to 1 scenario](https://lh3.googleusercontent.com/X67WkqncyD7myIfcgk26GFaJVAX-3YyvZg29dyQxc8gvT6RuR13Qu60rG5GYpbS3q3MN84cF2fRLJW6nAuWhqCECpSUCzz3kiZ40v20)
+![1 to 1 scenario](http://file-share.42web.io/uploads/1stscenario.png)
 
 
 In this scenario there will be 1 producer which produces messages and 1 consumer which consumes message
 
 ### 2nd scenario:
-![1 producer to consumer n](https://lh6.googleusercontent.com/fBI5S9P4T3UjSLHiPU2hGP2u4vOZoy4Dy3WOCkkaZwOamZrXMa-C8xL1cN3ZtGS9wA-JJLL58cFoSGWBlPJRX8q31qb0D4drIWzTkms)
+![1 producer to consumer n](http://file-share.42web.io/uploads/2ndsenario.png)
 In this scenario there will be 1 producer which produces messages and stores in redis database and number of consumers which consume messages at a time, if producer produces 800 messages per second then at a time 1 consumer will consume 200 messages that means redis will divide all messages equally to all the consumers 
 
 ### 3rd scenario:
 
-![N producers to 1 consumer](https://lh5.googleusercontent.com/zk2SGZgzCqjIG2qhaL2nSb6uhFewwgiz0-7CJH-_WXl1c2qG4ZsfKp1HCyEdEZbepby65iuqlV4GCE8MGR0EvegvH9Bidmfvarp_weg)
+![N producers to 1 consumer](http://file-share.42web.io/uploads/3rdscenario.png)
 
 In this scenario there will be many producers and single consumer all the  messages produced by producers will be consumed by single consumer 
 
 ### 4th scenario:
 
-![Producer n to consumer n](https://lh5.googleusercontent.com/gB6NEId003-Y31bgXxO60JNMa8kiu8WVOH8bDVFaGKKEiFICh2Zi7Qk0nXon4aAM5mNKasE5hDOl0pwrNzJV6vDTOYN11pOp_31GJPwr-zuiBFK2lGI4d-LdZHxNhXb6ErkdIp-CJLrlzuRQ1Q)
+![Producer n to consumer n](http://file-share.42web.io/uploads/4thscenario.png)
 
 In this scenario there will be many producers and many consumers, In practical terms, if we imagine having three consumers C1, C2, C3, and a stream that contains the messages 1, 2, 3, 4, 5, 6, 7 then what we want is to serve the messages according to the following diagram:
 
